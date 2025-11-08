@@ -1,15 +1,18 @@
-import React, { useState } from "react";
+// src/App.js
 import "./App.css";
 import Navbar from "./components/Navbar";
+import AuthGate from "./components/AuthGate";
 
 function App() {
-  const [session, setSession] = useState(null);
-
   return (
-    <div className="App">
+    <AuthGate>
       <Navbar />
-    
-    </div>
+      {/* Main Whiskr dashboard / routes will go here */}
+      <div style={{ padding: "1rem" }}>
+        <h1>Whiskr 🐾</h1>
+        <p>Welcome to your pet health dashboard.</p>
+      </div>
+    </AuthGate>
   );
 }
 
