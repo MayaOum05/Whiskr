@@ -1,3 +1,4 @@
+// src/AuthGate.js
 import { useEffect, useState } from "react";
 import {
   onAuthStateChanged,
@@ -6,6 +7,7 @@ import {
   signOut,
 } from "firebase/auth";
 import { auth } from "./firebase";
+import PetGate from "./PetGate";
 
 export default function AuthGate({ children }) {
   const [user, setUser] = useState(null);
@@ -47,17 +49,36 @@ export default function AuthGate({ children }) {
   if (user) {
     return (
       <div>
-        <div style={{ display: "flex", justifyContent: "space-between", padding: "0.5rem 1rem" }}>
-          <div>Logged in as: <strong>{user.email}</strong></div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            padding: "0.5rem 1rem",
+          }}
+        >
+          <div>
+            Logged in as: <strong>{user.email}</strong>
+          </div>
           <button onClick={handleLogout}>Log out</button>
         </div>
-        {children}
+
+        {/* 🔒 Before dashboard, enforce at least one pet */}
+        <PetGate user={user}>{children}</PetGate>
       </div>
     );
   }
 
   return (
-    <div style={{ maxWidth: 400, margin: "2rem auto", padding: "1.5rem", border: "1px solid #ccc", borderRadius: 8 }}>
+    <div
+      style={{
+        maxWidth: 400,
+        margin: "2rem auto",
+        padding: "1.5rem",
+        border: "1px solid " +
+          "#ccc",
+        borderRadius: 8,
+      }}
+    >
       <h2 style={{ textAlign: "center", marginBottom: "1rem" }}>
         {mode === "login" ? "Log in to Whiskr" : "Create your Whiskr account"}
       </h2>
@@ -99,14 +120,26 @@ export default function AuthGate({ children }) {
         </button>
       </form>
 
-      <p style={{ marginTop: "1rem", textAlign: "center", fontSize: "0.9rem" }}>
+      <p
+        style={{
+          marginTop: "1rem",
+          textAlign: "center",
+          fontSize: "0.9rem",
+        }}
+      >
         {mode === "login" ? (
           <>
             Don&apos;t have an account?{" "}
             <button
               type="button"
               onClick={() => setMode("register")}
-              style={{ background: "none", border: "none", color: "blue", textDecoration: "underline", cursor: "pointer" }}
+              style={{
+                background: "none",
+                border: "none",
+                color: "blue",
+                textDecoration: "underline",
+                cursor: "pointer",
+              }}
             >
               Sign up
             </button>
@@ -117,7 +150,13 @@ export default function AuthGate({ children }) {
             <button
               type="button"
               onClick={() => setMode("login")}
-              style={{ background: "none", border: "none", color: "blue", textDecoration: "underline", cursor: "pointer" }}
+              style={{
+                background: "none",
+                border: "none",
+                color: "blue",
+                textDecoration: "underline",
+                cursor: "pointer",
+              }}
             >
               Log in
             </button>
