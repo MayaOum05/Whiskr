@@ -1,4 +1,3 @@
-// src/AuthGate.js
 import { useEffect, useState } from "react";
 import {
   onAuthStateChanged,
