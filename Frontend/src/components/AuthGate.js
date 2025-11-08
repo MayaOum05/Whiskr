@@ -5,11 +5,11 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth } from "./firebase";
 
 export default function AuthGate({ children }) {
   const [user, setUser] = useState(null);
-  const [mode, setMode] = useState("login"); // 'login' or 'register'
+  const [mode, setMode] = useState("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -56,7 +56,6 @@ export default function AuthGate({ children }) {
     );
   }
 
-  // If not logged in, show auth form
   return (
     <div style={{ maxWidth: 400, margin: "2rem auto", padding: "1.5rem", border: "1px solid #ccc", borderRadius: 8 }}>
       <h2 style={{ textAlign: "center", marginBottom: "1rem" }}>
