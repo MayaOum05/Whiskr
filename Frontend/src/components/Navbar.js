@@ -1,4 +1,3 @@
-// src/Navbar.js
 import React, { useState } from "react";
 import "./Navbar.css";
 
@@ -39,7 +38,6 @@ export default function Navbar({
       </div>
 
       <ul className="navbar-links">
-        {/* Pets dropdown */}
         <li className="pets-tab">
           <button className="nav-link pets-button" onClick={togglePets}>
             Pets ▾
@@ -68,23 +66,7 @@ export default function Navbar({
           )}
         </li>
 
-        {/* Other top-level nav buttons (optional routes later) */}
-        <li>
-          <button className="nav-link" onClick={onShowDashboard}>
-            Dashboard
-          </button>
-        </li>
-        <li>
-          <button className="nav-link">Appointments</button>
-        </li>
-        <li>
-          <button className="nav-link">Medication</button>
-        </li>
-        <li>
-          <button className="nav-link">Donate</button>
-        </li>
-
-        {/* Profile dropdown */}
+        
         <li className="profile-tab">
           <button
             className="nav-link profile-button"
@@ -101,6 +83,22 @@ export default function Navbar({
             </div>
           )}
         </li>
+
+        <li>
+          <button className="nav-link">Appointments</button>
+        </li>
+        <li>
+          <button className="nav-link">Medication</button>
+        </li>
+        <li>
+          <button className="nav-link">
+            About
+          </button>
+        </li>
+        <li>
+          <button  className="nav-link">Donate</button>
+        </li>
+
       </ul>
     </nav>
   );

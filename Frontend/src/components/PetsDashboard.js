@@ -1,4 +1,3 @@
-// src/components/PetsDashboard.js (or src/PetsDashboard.js, match your path)
 import { useEffect, useState } from "react";
 import {
   collection,
@@ -11,19 +10,22 @@ import { db } from "./firebase";
 import AppointmentCalendar from "./AppointmentCalendar";
 import "./PetsDashboard.css";
 
+import FleabieChat from './FleabieChat';
+
 export default function PetsDashboard({ user }) {
   const [pets, setPets] = useState([]);
   const [selectedPet, setSelectedPet] = useState(null);
   const [history, setHistory] = useState([]);
   const [uploadFiles, setUploadFiles] = useState([]);
 
-  // Nearby vets & groomers state
   const [zip, setZip] = useState("");
   const [nearbyResults, setNearbyResults] = useState([]);
   const [nearbyLoading, setNearbyLoading] = useState(false);
   const [nearbyError, setNearbyError] = useState("");
 
-  // Load all pets for user
+  const [showChat, setShowChat] = useState(false);
+
+
   useEffect(() => {
     if (!user) return;
 
@@ -39,7 +41,6 @@ export default function PetsDashboard({ user }) {
         }));
         setPets(items);
 
-        // Default to first pet if none selected yet
         if (!selectedPet && items.length > 0) {
           setSelectedPet(items[0]);
         }
@@ -50,10 +51,8 @@ export default function PetsDashboard({ user }) {
     );
 
     return () => unsub();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  // Load medical history for selected pet
   useEffect(() => {
     if (!user || !selectedPet) {
       setHistory([]);
@@ -110,7 +109,6 @@ export default function PetsDashboard({ user }) {
     // TODO: later send these to your backend/Gemini for analysis
   };
 
-  // 🔍 Search nearby vets & groomers
   const handleNearbySearch = async (e) => {
     e.preventDefault();
     setNearbyError("");
@@ -149,7 +147,6 @@ export default function PetsDashboard({ user }) {
               : "Pet Health Overview"}
           </h1>
 
-          {/* Pet Switcher */}
           <div className="pet-switcher">
             <label htmlFor="pet-select">Switch Pet:</label>
             <select
@@ -169,13 +166,11 @@ export default function PetsDashboard({ user }) {
           </div>
         </div>
 
-        {/* Main dashboard grid */}
         <div className="dashboard-grid">
           <div className="card">
             <AppointmentCalendar pet={selectedPet} user={user} />
           </div>
 
-          {/* 🔍 Nearby vets & groomers card */}
           <div className="card">
             <h3>Search Nearby Vets &amp; Groomers</h3>
             <p>Find care providers close to you.</p>
@@ -265,7 +260,6 @@ export default function PetsDashboard({ user }) {
               </ul>
             )}
 
-            {/* Upload area */}
             <div className="history-upload">
               <label className="upload-label">
                 Upload records (PDF, images)
@@ -293,9 +287,22 @@ export default function PetsDashboard({ user }) {
         </div>
       </section>
 
-      <button className="chat-fab" aria-label="Open AI Chat">
-        💬
+      <button
+        className={`fleabie-toggle ${showChat ? "open" : ""}`}
+        onClick={() => setShowChat((prev) => !prev)}
+        aria-label={showChat ? "Close Fleabie chat" : "Open Fleabie chat"}
+      >
+        {showChat ? "✖️" : "💬"}
       </button>
+
+      {/* Chat Panel */}
+      {showChat && (
+        <div className="fleabie-chat-container">
+          <FleabieChat petProfile={selectedPet} />
+        </div>
+      )}
+
+
     </main>
   );
 }
