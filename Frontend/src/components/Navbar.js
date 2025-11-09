@@ -3,7 +3,7 @@ export default function Navbar({ onShowPets, onShowAddPet }) {
     <nav>
       <h2>Whiskr</h2>
       <div>
-        <button onClick={onShowPets}>Pets</button>
+        
       </div>
     </nav>
   );
