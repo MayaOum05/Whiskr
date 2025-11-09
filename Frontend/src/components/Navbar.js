@@ -83,13 +83,6 @@ export default function Navbar({
             </div>
           )}
         </li>
-
-        <li>
-          <button className="nav-link">Appointments</button>
-        </li>
-        <li>
-          <button className="nav-link">Medication</button>
-        </li>
         <li>
            <a className="nav-link"href="/About.html">About</a>
         </li>

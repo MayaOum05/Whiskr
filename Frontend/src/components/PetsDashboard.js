@@ -106,7 +106,7 @@ export default function PetsDashboard({ user }) {
   const handleFilesChange = (e) => {
     const files = Array.from(e.target.files || []);
     setUploadFiles(files);
-    // TODO: later send these to your backend/Gemini for analysis
+    // later send these to backend/Gemini for analysis
   };
 
   const handleNearbySearch = async (e) => {
