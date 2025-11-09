@@ -51,7 +51,7 @@ export default function PetsDashboard({ user }) {
     );
 
     return () => unsub();
-  }, [user]);
+  }, [user, selectedPet]);
 
   useEffect(() => {
     if (!user || !selectedPet) {
