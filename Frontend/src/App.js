@@ -1,15 +1,17 @@
 import "./App.css";
-import Navbar from "./components/Navbar";
 import AuthGate from "./components/AuthGate";
 import PetsDashboard from "./components/PetsDashboard";
+import Navbar from "./components/Navbar"; // if you have one
 
-function App() {
+export default function App() {
   return (
     <AuthGate>
-      <Navbar />
-      <PetsDashboard />
+      {(user, { onLogout }) => (
+        <>
+          <Navbar user={user} onLogout={onLogout} />
+          <PetsDashboard user={user} />
+        </>
+      )}
     </AuthGate>
   );
 }
-
-export default App;

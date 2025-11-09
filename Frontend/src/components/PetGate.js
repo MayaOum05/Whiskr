@@ -24,7 +24,6 @@ export default function PetGate({ user, children }) {
 
   useEffect(() => {
     checkPets();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.uid]);
 
   if (loading) {
@@ -43,6 +42,5 @@ export default function PetGate({ user, children }) {
     );
   }
 
-  // User has at least one pet → show the dashboard content
   return <>{children}</>;
 }

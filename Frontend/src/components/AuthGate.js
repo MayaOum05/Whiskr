@@ -6,7 +6,6 @@ import {
   signOut,
 } from "firebase/auth";
 import { auth } from "./firebase";
-import PetGate from "./PetGate";
 
 export default function AuthGate({ children }) {
   const [user, setUser] = useState(null);
@@ -14,10 +13,12 @@ export default function AuthGate({ children }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [checking, setChecking] = useState(true);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
+      setChecking(false);
     });
     return () => unsub();
   }, []);
@@ -32,12 +33,11 @@ export default function AuthGate({ children }) {
       } else {
         await createUserWithEmailAndPassword(auth, email, password);
       }
-
       setEmail("");
       setPassword("");
     } catch (err) {
       console.error(err);
-      setError(err.message);
+      setError(err.message || "Something went wrong");
     }
   };
 
@@ -45,123 +45,68 @@ export default function AuthGate({ children }) {
     await signOut(auth);
   };
 
-  if (user) {
-    return (
-      <div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            padding: "0.5rem 1rem",
-          }}
-        >
-          <div>
-            Logged in as: <strong>{user.email}</strong>
-          </div>
-          <button onClick={handleLogout}>Log out</button>
-        </div>
+  if (checking) {
+    return <p style={{ padding: "1rem" }}>Checking login…</p>;
+  }
 
-        {/* 🔒 Before dashboard, enforce at least one pet */}
-        <PetGate user={user}>{children}</PetGate>
+  // If not logged in, show auth form
+  if (!user) {
+    return (
+      <div style={{ padding: "1rem", maxWidth: 400 }}>
+        <h2>{mode === "login" ? "Log in" : "Sign up"}</h2>
+        {error && (
+          <p style={{ color: "red", fontSize: "0.9rem" }}>{error}</p>
+        )}
+        <form onSubmit={handleSubmit}>
+          <div style={{ marginBottom: "0.5rem" }}>
+            <label>
+              Email
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                style={{ width: "100%" }}
+                required
+              />
+            </label>
+          </div>
+          <div style={{ marginBottom: "0.5rem" }}>
+            <label>
+              Password
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                style={{ width: "100%" }}
+                required
+              />
+            </label>
+          </div>
+          <button type="submit">
+            {mode === "login" ? "Log in" : "Create account"}
+          </button>
+        </form>
+
+        <button
+          type="button"
+          style={{ marginTop: "0.5rem" }}
+          onClick={() =>
+            setMode((m) => (m === "login" ? "signup" : "login"))
+          }
+        >
+          {mode === "login"
+            ? "Need an account? Sign up"
+            : "Already have an account? Log in"}
+        </button>
       </div>
     );
   }
 
-  return (
-    <div
-      style={{
-        maxWidth: 400,
-        margin: "2rem auto",
-        padding: "1.5rem",
-        border: "1px solid " +
-          "#ccc",
-        borderRadius: 8,
-      }}
-    >
-      <h2 style={{ textAlign: "center", marginBottom: "1rem" }}>
-        {mode === "login" ? "Log in to Whiskr" : "Create your Whiskr account"}
-      </h2>
+  // 🔑 HERE: when logged in, call children as a function and give it `user`
+  if (typeof children === "function") {
+    return children(user, { onLogout: handleLogout });
+  }
 
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: "0.5rem" }}>
-          <label>Email</label>
-          <input
-            type="email"
-            value={email}
-            required
-            onChange={(e) => setEmail(e.target.value)}
-            style={{ width: "100%", padding: "0.5rem" }}
-          />
-        </div>
-
-        <div style={{ marginBottom: "0.5rem" }}>
-          <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            required
-            onChange={(e) => setPassword(e.target.value)}
-            style={{ width: "100%", padding: "0.5rem" }}
-          />
-        </div>
-
-        {error && (
-          <p style={{ color: "red", fontSize: "0.9rem" }}>
-            {error}
-          </p>
-        )}
-
-        <button
-          type="submit"
-          style={{ width: "100%", padding: "0.5rem", marginTop: "0.5rem" }}
-        >
-          {mode === "login" ? "Log In" : "Sign Up"}
-        </button>
-      </form>
-
-      <p
-        style={{
-          marginTop: "1rem",
-          textAlign: "center",
-          fontSize: "0.9rem",
-        }}
-      >
-        {mode === "login" ? (
-          <>
-            Don&apos;t have an account?{" "}
-            <button
-              type="button"
-              onClick={() => setMode("register")}
-              style={{
-                background: "none",
-                border: "none",
-                color: "blue",
-                textDecoration: "underline",
-                cursor: "pointer",
-              }}
-            >
-              Sign up
-            </button>
-          </>
-        ) : (
-          <>
-            Already have an account?{" "}
-            <button
-              type="button"
-              onClick={() => setMode("login")}
-              style={{
-                background: "none",
-                border: "none",
-                color: "blue",
-                textDecoration: "underline",
-                cursor: "pointer",
-              }}
-            >
-              Log in
-            </button>
-          </>
-        )}
-      </p>
-    </div>
-  );
+  // fallback (if you ever use it without a function child)
+  return children;
 }
