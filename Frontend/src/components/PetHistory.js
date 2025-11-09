@@ -38,7 +38,7 @@ export default function PetHistory({ user }) {
     });
 
     return () => unsub();
-  }, [user]);
+  }, [user, selectedPet]);
 
   // load history for selected pet
   useEffect(() => {
