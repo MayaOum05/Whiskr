@@ -1,4 +1,4 @@
-// src/components/PetDashboard.js (or src/PetDashboard.js, match your path)
+// src/components/PetsDashboard.js (or src/PetsDashboard.js, match your path)
 import { useEffect, useState } from "react";
 import {
   collection,
@@ -16,6 +16,12 @@ export default function PetsDashboard({ user }) {
   const [selectedPet, setSelectedPet] = useState(null);
   const [history, setHistory] = useState([]);
   const [uploadFiles, setUploadFiles] = useState([]);
+
+  // Nearby vets & groomers state
+  const [zip, setZip] = useState("");
+  const [nearbyResults, setNearbyResults] = useState([]);
+  const [nearbyLoading, setNearbyLoading] = useState(false);
+  const [nearbyError, setNearbyError] = useState("");
 
   // Load all pets for user
   useEffect(() => {
@@ -44,6 +50,7 @@ export default function PetsDashboard({ user }) {
     );
 
     return () => unsub();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   // Load medical history for selected pet
@@ -103,6 +110,35 @@ export default function PetsDashboard({ user }) {
     // TODO: later send these to your backend/Gemini for analysis
   };
 
+  // 🔍 Search nearby vets & groomers
+  const handleNearbySearch = async (e) => {
+    e.preventDefault();
+    setNearbyError("");
+    setNearbyResults([]);
+
+    if (!zip) {
+      setNearbyError("Please enter a ZIP code.");
+      return;
+    }
+
+    setNearbyLoading(true);
+    try {
+      const res = await fetch(`/api/nearby?zip=${encodeURIComponent(zip)}`);
+      const data = await res.json();
+
+      if (!res.ok) {
+        setNearbyError(data.error || "Something went wrong searching nearby services.");
+      } else {
+        setNearbyResults(data);
+      }
+    } catch (err) {
+      console.error("Nearby search error:", err);
+      setNearbyError("Failed to fetch nearby services.");
+    } finally {
+      setNearbyLoading(false);
+    }
+  };
+
   return (
     <main className="pet-dashboard">
       <section className="health-section">
@@ -139,9 +175,61 @@ export default function PetsDashboard({ user }) {
             <AppointmentCalendar pet={selectedPet} user={user} />
           </div>
 
+          {/* 🔍 Nearby vets & groomers card */}
           <div className="card">
             <h3>Search Nearby Vets &amp; Groomers</h3>
             <p>Find care providers close to you.</p>
+
+            <form className="nearby-form" onSubmit={handleNearbySearch}>
+              <input
+                type="text"
+                value={zip}
+                onChange={(e) => setZip(e.target.value)}
+                placeholder="Enter ZIP code"
+                className="nearby-zip-input"
+                required
+              />
+              <button type="submit" className="nearby-search-btn">
+                Search
+              </button>
+            </form>
+
+            {nearbyLoading && (
+              <p className="nearby-status">Searching nearby services…</p>
+            )}
+            {nearbyError && (
+              <p className="nearby-error">{nearbyError}</p>
+            )}
+
+            {!nearbyLoading && !nearbyError && nearbyResults.length === 0 && zip && (
+              <p className="nearby-status">
+                No results found yet — try a different ZIP or radius later.
+              </p>
+            )}
+
+            {nearbyResults.length > 0 && (
+              <ul className="nearby-results">
+                {nearbyResults.map((place, idx) => (
+                  <li key={idx} className="nearby-place">
+                    <div className="nearby-place-header">
+                      <strong>{place.name}</strong>
+                      {place.rating && (
+                        <span className="nearby-rating">
+                          ⭐ {place.rating} ({place.reviews || 0} reviews)
+                        </span>
+                      )}
+                    </div>
+                    <p className="nearby-address">{place.address}</p>
+                    <p className="nearby-price">
+                      💰 Avg. price: {place.price || "N/A"}
+                    </p>
+                    <p className="nearby-ai">
+                      🧠 AI Summary: (Gemini-powered summary coming soon)
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
 
           <div className="card">
@@ -190,7 +278,7 @@ export default function PetsDashboard({ user }) {
               </label>
               <p className="upload-helper">
                 These files will be analyzed by Fleabie the AI Assistant to
-                 analyze and simplify medical notes (feature coming soon).
+                analyze and simplify medical notes (feature coming soon).
               </p>
 
               {uploadFiles.length > 0 && (

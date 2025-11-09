@@ -1,0 +1,9 @@
+name = "whiskr-backend"
+main = "functions/nearby.js"
+compatibility_date = "2025-11-01"
+
+[vars]
+GOOGLE_MAPS_API_KEY = "AIzaSyBNHk7K01a_JG2Qhrif0Hjq5JEV_Gjr0ts"
+
+[site]
+bucket = "../Frontend/dist"
