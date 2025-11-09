@@ -9,6 +9,7 @@ import { db } from "./firebase";
 
 import AppointmentCalendar from "./AppointmentCalendar";
 import "./PetsDashboard.css";
+import Medicine from './Medicine';
 
 import FleabieChat from './FleabieChat';
 
@@ -106,7 +107,7 @@ export default function PetsDashboard({ user }) {
   const handleFilesChange = (e) => {
     const files = Array.from(e.target.files || []);
     setUploadFiles(files);
-    // TODO: later send these to your backend/Gemini for analysis
+    // later send these to backend/Gemini for analysis
   };
 
   const handleNearbySearch = async (e) => {
@@ -228,8 +229,7 @@ export default function PetsDashboard({ user }) {
           </div>
 
           <div className="card">
-            <h3>Medicine List</h3>
-            <p>Track medications, dosages, and schedules.</p>
+            <Medicine />
           </div>
 
           <div className="card card-history">

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import "./App.css";
 import AuthGate from "./components/AuthGate";
@@ -27,7 +26,7 @@ export default function App() {
           {activePetView === "dashboard" && <PetsDashboard user={user} />}
           {activePetView === "add" && <AddPetForm user={user} />}
           {activePetView === "view" && <PetViewer user={user} />}
-          {activePetView === "history" && <PetHistory user={user} />}
+          {activePetView === "history" && <PetHistory user={user} />}          
         </>
       )}
     </AuthGate>

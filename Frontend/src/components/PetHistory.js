@@ -1,4 +1,3 @@
-// src/components/PetHistory.js
 import { useEffect, useState } from "react";
 import {
   collection,
@@ -40,7 +39,6 @@ export default function PetHistory({ user }) {
     return () => unsub();
   }, [user, selectedPet]);
 
-  // load history for selected pet
   useEffect(() => {
     if (!user || !selectedPet) {
       setHistory([]);

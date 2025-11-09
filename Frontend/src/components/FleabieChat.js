@@ -68,7 +68,7 @@ export default function FleabieChat({ petProfile }) {
   return (
     <div className="fleabie-chat">
       <div className="fleabie-header">
-        <h2>Fleabie AI Assistant 🐾</h2>
+        <h2>Fleabie</h2>
         <select
           value={mode}
           onChange={(e) => setMode(e.target.value)}
@@ -92,7 +92,7 @@ export default function FleabieChat({ petProfile }) {
         ))}
         {loading && (
           <div className="message-bubble assistant">
-            Thinking like a little flea... 🪲
+            Thinking...
           </div>
         )}
       </div>

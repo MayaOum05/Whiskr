@@ -85,23 +85,14 @@ export default function Navbar({
             </div>
           )}
         </li>
-
         <li>
-          <button className="nav-link">Appointments</button>
+           <a className="nav-link"href="/About.html">About</a>
         </li>
         <li>
-          <button className="nav-link">Medication</button>
-        </li>
-        <li>
-          <button className="nav-link">
-            About
-          </button>
-        </li>
-        <li>
-          <button  className="nav-link">Donate</button>
+           <a className="nav-link"href="/donate.html">Donate</a>
         </li>
 
-      </ul>
+      </ul> 
     </nav>
   );
 }
