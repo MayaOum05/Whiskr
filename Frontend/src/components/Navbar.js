@@ -8,6 +8,8 @@ export default function Navbar({
   onShowAddPet,
   onShowViewPets,
   onShowPetHistory,
+  onShowAbout,
+  onShowDonate,
 }) {
   const [profileOpen, setProfileOpen] = useState(false);
   const [petsOpen, setPetsOpen] = useState(false);
