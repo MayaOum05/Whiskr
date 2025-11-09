@@ -11,7 +11,7 @@ export default function FleabieChat({ petProfile }) {
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [mode, setMode] = useState("general"); // "general" | "vet_summary"
+  const [mode, setMode] = useState("general");
 
   const handleSend = async () => {
     if (!input.trim() || loading) return;
@@ -23,7 +23,7 @@ export default function FleabieChat({ petProfile }) {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/chat", {
+      const res = await fetch("http://127.0.0.1:8788/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
