@@ -9,6 +9,7 @@ import { db } from "./firebase";
 
 import AppointmentCalendar from "./AppointmentCalendar";
 import "./PetsDashboard.css";
+import Medicine from './Medicine';
 
 import FleabieChat from './FleabieChat';
 
@@ -228,8 +229,7 @@ export default function PetsDashboard({ user }) {
           </div>
 
           <div className="card">
-            <h3>Medicine List</h3>
-            <p>Track medications, dosages, and schedules.</p>
+            <Medicine />
           </div>
 
           <div className="card card-history">
