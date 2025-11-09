@@ -91,15 +91,13 @@ export default function Navbar({
           <button className="nav-link">Medication</button>
         </li>
         <li>
-          <button className="nav-link">
-            About
-          </button>
+           <a className="nav-link"href="/About.html">About</a>
         </li>
         <li>
-          <button  className="nav-link">Donate</button>
+           <a className="nav-link"href="/donate.html">Donate</a>
         </li>
 
-      </ul>
+      </ul> 
     </nav>
   );
 }
