@@ -1,16 +1,14 @@
-* {
-    background-image: linear-gradient(deg 153, #9abce5, #f46584);
-
-}
 body {
     font-family: Arial, Helvetica, sans-serif;
+    color: #5a1010;
     margin: 50px;
     padding: 0;
+    background-image: linear-gradient(to bottom right, #9abce5, #f46584);
 }
 #donation-body {
     text-align: center;
 }
-.class {
+.title {
     font-size: 3em;
 
 }
